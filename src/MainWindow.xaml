@@ -1,0 +1,78 @@
+<Window x:Class="WpfApplication5.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication5"
+        mc:Ignorable="d"
+        Title="ecs87's AMD Next-Gear Tool" Height="580" Width="590" WindowStartupLocation="CenterScreen" Icon="Alecive-Flatwoken-Apps-Amd-Ati.ico">
+    <Grid>
+        <Button x:Name="buttonClkAndVolts" Content="Set" HorizontalAlignment="Left" Margin="10,322,0,0" VerticalAlignment="Top" Width="75" Click="buttonClkAndVolts_Click"/>
+        <Button x:Name="button_refreshDeviceCombobox" Content="Refresh Device List" HorizontalAlignment="Left" Margin="432,10,0,0" VerticalAlignment="Top" Width="123" Click="button_refreshDeviceCombobox_Click"/>
+        <Label x:Name="label" Content="PLVL 0" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PPlayCV1" HorizontalAlignment="Left" Height="23" Margin="60,96,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayCC1" HorizontalAlignment="Left" Height="23" Margin="175,96,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <ComboBox x:Name="deviceComboBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="417" SelectionChanged="comboBox1_SelectionChanged"/>
+        <TextBox x:Name="target_FanSpeed" HorizontalAlignment="Left" Height="23" Margin="125,420,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="target_Temperature" HorizontalAlignment="Left" Height="23" Margin="240,420,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="buttonThermals" Content="Set" HorizontalAlignment="Left" Margin="10,450,0,0" VerticalAlignment="Top" Width="75" Click="buttonThermals_Click"/>
+        <TextBox x:Name="min_FanSpeed" HorizontalAlignment="Left" Height="23" Margin="10,420,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayMC1" HorizontalAlignment="Left" Height="23" Margin="425,96,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayMV1" HorizontalAlignment="Left" Height="23" Margin="310,96,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <Label x:Name="label_Copy" Content="PLVL 1" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PPlayCV2" HorizontalAlignment="Left" Height="23" Margin="60,124,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayCC2" HorizontalAlignment="Left" Height="23" Margin="175,124,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <Label x:Name="label_Copy1" Content="PLVL 2" HorizontalAlignment="Left" Margin="10,149,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy2" Content="PLVL 3" HorizontalAlignment="Left" Margin="10,177,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy3" Content="PLVL 4" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy4" Content="PLVL 5" HorizontalAlignment="Left" Margin="10,233,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy5" Content="PLVL 6" HorizontalAlignment="Left" Margin="10,261,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy6" Content="PLVL 7" HorizontalAlignment="Left" Margin="10,289,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PPlayCV3" HorizontalAlignment="Left" Height="23" Margin="60,152,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayCV4" HorizontalAlignment="Left" Height="23" Margin="60,180,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayCV5" HorizontalAlignment="Left" Height="23" Margin="60,208,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayCV6" HorizontalAlignment="Left" Height="23" Margin="60,236,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayCV7" HorizontalAlignment="Left" Height="23" Margin="60,264,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayCV8" HorizontalAlignment="Left" Height="23" Margin="60,292,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayCC3" HorizontalAlignment="Left" Height="23" Margin="175,152,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayCC4" HorizontalAlignment="Left" Height="23" Margin="175,180,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayCC5" HorizontalAlignment="Left" Height="23" Margin="175,208,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayCC6" HorizontalAlignment="Left" Height="23" Margin="175,236,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayCC7" HorizontalAlignment="Left" Height="23" Margin="175,264,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayCC8" HorizontalAlignment="Left" Height="23" Margin="175,292,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayMC2" HorizontalAlignment="Left" Height="23" Margin="425,124,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayMC3" HorizontalAlignment="Left" Height="23" Margin="425,152,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayMC4" HorizontalAlignment="Left" Height="23" Margin="425,180,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayMC5" HorizontalAlignment="Left" Height="23" Margin="425,208,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayMC6" HorizontalAlignment="Left" Height="23" Margin="425,236,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayMC7" HorizontalAlignment="Left" Height="23" Margin="425,264,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayMC8" HorizontalAlignment="Left" Height="23" Margin="425,292,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="130"/>
+        <TextBox x:Name="PPlayMV2" HorizontalAlignment="Left" Height="23" Margin="310,124,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayMV3" HorizontalAlignment="Left" Height="23" Margin="310,152,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayMV4" HorizontalAlignment="Left" Height="23" Margin="310,180,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayMV5" HorizontalAlignment="Left" Height="23" Margin="310,208,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayMV6" HorizontalAlignment="Left" Height="23" Margin="310,236,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayMV7" HorizontalAlignment="Left" Height="23" Margin="310,264,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <TextBox x:Name="PPlayMV8" HorizontalAlignment="Left" Height="23" Margin="310,292,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110"/>
+        <Label x:Name="label1" Content="Fan and Temperature Controls" HorizontalAlignment="Left" Margin="10,363,0,0" VerticalAlignment="Top" Width="330"/>
+        <Label x:Name="label1_Copy" Content="Voltage and Clock controls for Core and Memory" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="330"/>
+        <Label x:Name="label2" Content="Min Fan Speed" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="110"/>
+        <Label x:Name="label2_Copy" Content="Target Fan Speed" HorizontalAlignment="Left" Margin="125,389,0,0" VerticalAlignment="Top" Width="110"/>
+        <Label x:Name="label2_Copy1" Content="Target Temp" HorizontalAlignment="Left" Margin="240,389,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="label2_Copy2" Content="Core Voltage (mV)" HorizontalAlignment="Left" Margin="60,65,0,0" VerticalAlignment="Top" Width="110"/>
+        <Label x:Name="label2_Copy3" Content="Core Clock (mhz)" HorizontalAlignment="Left" Margin="175,65,0,0" VerticalAlignment="Top" Width="130"/>
+        <Label x:Name="label2_Copy4" Content="Mem Voltage (mV)" HorizontalAlignment="Left" Margin="310,65,0,0" VerticalAlignment="Top" Width="110"/>
+        <Label x:Name="label2_Copy5" Content="Memory Clock (mhz)" HorizontalAlignment="Left" Margin="425,65,0,0" VerticalAlignment="Top" Width="130"/>
+        <Label x:Name="label2_Copy6" Content="Current Fan Speed" HorizontalAlignment="Left" Margin="345,389,0,0" VerticalAlignment="Top" Width="115"/>
+        <TextBox x:Name="current_FanSpeed" HorizontalAlignment="Left" Height="23" Margin="345,420,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
+        <Button x:Name="buttonClkAndVolts_Load" Content="Load" HorizontalAlignment="Left" Margin="90,508,0,0" VerticalAlignment="Top" Width="75" Click="buttonClkAndVolts_Load_Click"/>
+        <Button x:Name="buttonClkAndVolts_Save" Content="Save" HorizontalAlignment="Left" Margin="10,508,0,0" VerticalAlignment="Top" Width="75" Click="buttonClkAndVolts_Save_Click"/>
+        <Button x:Name="buttonBIOSinfo" Content="BIOS Info" HorizontalAlignment="Left" Margin="170,508,0,0" VerticalAlignment="Top" Width="75" Click="buttonBIOSinfo_Click"/>
+        <Label x:Name="label1_Copy1" Content="Other Functions" HorizontalAlignment="Left" Margin="10,477,0,0" VerticalAlignment="Top" Width="330"/>
+        <Button x:Name="button_VoltageOffset" Content="Set Offset" HorizontalAlignment="Left" Margin="497,508,0,0" VerticalAlignment="Top" Width="75" Click="button_VoltageOffset_Click"/>
+        <TextBox x:Name="cmVoffset" HorizontalAlignment="Left" Height="23" Margin="392,507,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="label1_Copy2" Content="Voltage Offset (input x 6.25mV)" HorizontalAlignment="Left" Margin="392,477,0,0" VerticalAlignment="Top" Width="180"/>
+        <Button x:Name="buttonReset" Content="Reset" HorizontalAlignment="Left" Margin="490,322,0,0" VerticalAlignment="Top" Width="65" Click="buttonReset_Click"/>
+        <ComboBox x:Name="dropdown_reset" HorizontalAlignment="Left" Margin="310,322,0,0" VerticalAlignment="Top" Width="175"/>
+    </Grid>
+</Window>
