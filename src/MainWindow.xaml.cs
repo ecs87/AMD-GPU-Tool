@@ -23,10 +23,26 @@ namespace WpfApplication5
         {
             InitializeComponent();
             asyncLCFS();
-            dropdown_reset.Items.Add("Clock Speeds");
-            dropdown_reset.Items.Add("Voltages");
-            dropdown_reset.Items.Add("All");
-            MessageBox.Show("As always, be careful when making any modifications to your cards (I assume zero responsibility for your card catching fire or starting the first robot vs human war) and reboot after making final modifications to see true results.", "Welcome to ecs87's AMD GPU Control Tool");
+            //init
+            string[] initFile = Directory.GetFiles(@".", "ngODInit", SearchOption.AllDirectories);
+            if (initFile.Length != 0) { autoSettings(); }
+            //dropdown_reset.Items.Add("Clock Speeds");
+            //dropdown_reset.Items.Add("Voltages");
+            //dropdown_reset.Items.Add("All");
+            string[] initFileDisclaimer = Directory.GetFiles(@".", "ngODDisclaimer", SearchOption.AllDirectories);
+            if (initFileDisclaimer.Length == 0)
+            {
+                MessageBoxResult ecs87Disclaimer = MessageBox.Show("As always, be careful when making any modifications to your cards (I assume zero responsibility for your card catching fire or starting the first robot vs human war) and reboot after making final modifications to see true results. Continue?", "Welcome to ecs87's AMD GPU Control Tool", MessageBoxButton.YesNo);
+                if (ecs87Disclaimer == MessageBoxResult.Yes)
+                {
+                    File.WriteAllText("ngODDisclaimer", "Agreed");
+                }
+                else if (ecs87Disclaimer == MessageBoxResult.No)
+                {
+                    System.Windows.Application.Current.Shutdown();
+                }
+            }
+            button_refreshDeviceCombobox_Click(this, null);
         }
         private async void asyncLCFS()
         {
@@ -87,44 +103,36 @@ namespace WpfApplication5
         {
             list = new List<string>();
             deviceComboBox.Items.Clear();
-            string standard_output;
+            string standard_output = "";
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardInput = true;
             p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.FileName = @"ecs87NextGearOD.exe";
-            p.StartInfo.Arguments = "g";
+            p.StartInfo.FileName = "cmd.exe";
             /*
             p.OutputDataReceived += (s, f) => Console.WriteLine(f.Data);
             p.Start();
             p.BeginOutputReadLine();
             */
             p.Start();
+            p.StandardInput.WriteLine("ecs87NextGearOD.exe g");
+            p.StandardInput.WriteLine("ecs87NextGearOD.exe f");
+            p.StandardInput.WriteLine("exit");
+            bool alreadyExist = list.Contains(standard_output);
             while ((standard_output = p.StandardOutput.ReadLine()) != null)
             {
+                if (alreadyExist == true) { continue; }
                 list.Add(standard_output);
             }
-
             foreach (var listitem in list)
             {
-                if (listitem.Contains("Bus ID"))
+                if (listitem.Contains("Bus ID") && !deviceComboBox.Items.Contains(listitem))
                 {
                     deviceComboBox.Items.Add(listitem);
                 }
             }
             p.Close();
-            Process p2 = new Process();
-            p2.StartInfo.UseShellExecute = false;
-            p2.StartInfo.RedirectStandardOutput = true;
-            p2.StartInfo.FileName = @"ecs87NextGearOD.exe";
-            p2.StartInfo.Arguments = "f";
-            p2.StartInfo.CreateNoWindow = true;
-            p2.Start();
-            while ((standard_output = p2.StandardOutput.ReadLine()) != null)
-            {
-                list.Add(standard_output);
-            }
-            p2.Close();
         }
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -289,8 +297,14 @@ namespace WpfApplication5
             {
                 MessageBoxFinal += standard_output + "\n";
             }
-            MessageBox.Show(MessageBoxFinal);
+            MessageBox.Show(MessageBoxFinal, "BIOS Info");
             p2.Close();
+        }
+        private void afterSetRefresh()
+        {
+            string confirmBusNumber = deviceComboBox.Text;
+            button_refreshDeviceCombobox_Click(this, null);
+            this.deviceComboBox.SelectedValue = confirmBusNumber;
         }
         private void buttonThermals_Click(object sender, RoutedEventArgs e)
         {
@@ -333,6 +347,7 @@ namespace WpfApplication5
                 p3.Start();
                 Thread.Sleep(500);
                 p3.Close();
+                afterSetRefresh();
             }
         }
         private void buttonReset_Click(object sender, System.EventArgs e)
@@ -344,116 +359,18 @@ namespace WpfApplication5
                 var confirmBusNumber2 = confirmBusNumber.IndexOf("Bus ID: ");
                 var confirmBusNumberPre = confirmBusNumber.Substring(confirmBusNumber2 + 8, 4);
                 var confirmBusNumberFinal = Regex.Replace(confirmBusNumberPre, "[^0-9.]", "");
-                //switch
-                dropdown_reset.Items.Add("Clock Speeds");
-                dropdown_reset.Items.Add("Voltages");
-                dropdown_reset.Items.Add("All");
-                if (dropdown_reset.Text == "All")
-                {
-                    //start
-                    Process p1 = new Process();
-                    p1.StartInfo.UseShellExecute = false;
-                    p1.StartInfo.RedirectStandardOutput = true;
-                    p1.StartInfo.CreateNoWindow = true;
-                    p1.StartInfo.FileName = @"ecs87NextGearOD.exe";
-                    //Reset everything
-                    p1.StartInfo.Arguments = "rmc " + confirmBusNumberFinal;
-                    p1.Start();
-                    Thread.Sleep(500); //give it time to...breathe
-                    p1.Close();
-                }
-                else if (dropdown_reset.Text == "Voltages")
-                {
-                    //save old clock speeds
-                    var PPlayCC1_backup = PPlayCC1.Text;
-                    var PPlayCC2_backup = PPlayCC2.Text;
-                    var PPlayCC3_backup = PPlayCC3.Text;
-                    var PPlayCC4_backup = PPlayCC4.Text;
-                    var PPlayCC5_backup = PPlayCC5.Text;
-                    var PPlayCC6_backup = PPlayCC6.Text;
-                    var PPlayCC7_backup = PPlayCC7.Text;
-                    var PPlayCC8_backup = PPlayCC8.Text;
-                    var PPlayMC1_backup = PPlayMC1.Text;
-                    var PPlayMC2_backup = PPlayMC2.Text;
-                    var PPlayMC3_backup = PPlayMC3.Text;
-                    var PPlayMC4_backup = PPlayMC4.Text;
-                    var PPlayMC5_backup = PPlayMC5.Text;
-                    var PPlayMC6_backup = PPlayMC6.Text;
-                    var PPlayMC7_backup = PPlayMC7.Text;
-                    var PPlayMC8_backup = PPlayMC8.Text;
-                    //start
-                    Process p1 = new Process();
-                    p1.StartInfo.UseShellExecute = false;
-                    p1.StartInfo.RedirectStandardOutput = true;
-                    p1.StartInfo.CreateNoWindow = true;
-                    p1.StartInfo.FileName = @"ecs87NextGearOD.exe";
-                    //Reset everything
-                    p1.StartInfo.Arguments = "rmc " + confirmBusNumberFinal;
-                    p1.Start();
-                    Thread.Sleep(500); //give it time to...breathe
-                    p1.Close();
-                    //start
-                    Process p2 = new Process();
-                    p2.StartInfo.UseShellExecute = false;
-                    p2.StartInfo.RedirectStandardOutput = true;
-                    p2.StartInfo.CreateNoWindow = true;
-                    p2.StartInfo.FileName = @"ecs87NextGearOD.exe";
-                    //Set backuped clocks
-                    p2.StartInfo.Arguments = "g setclocksandvoltages " + PPlayCC1_backup + " " + PPlayCC2_backup + " " + PPlayCC3_backup + " " + PPlayCC4_backup + " " + PPlayCC5_backup + " " + PPlayCC6_backup + " " + PPlayCC7_backup + " " + PPlayCC8_backup + " " +
-                        PPlayMC1_backup + " " + PPlayMC2_backup + " " + PPlayMC3_backup + " " + PPlayMC4_backup + " " + PPlayMC5_backup + " " + PPlayMC6_backup + " " + PPlayMC7_backup + " " + PPlayMC8_backup + " " +
-                        PPlayCV1.Text + " " + PPlayCV2.Text + " " + PPlayCV3.Text + " " + PPlayCV4.Text + " " + PPlayCV5.Text + " " + PPlayCV6.Text + " " + PPlayCV7.Text + " " + PPlayCV8.Text + " " +
-                        PPlayMV1.Text + " " + PPlayMV2.Text + " " + PPlayMV3.Text + " " + PPlayMV4.Text + " " + PPlayMV5.Text + " " + PPlayMV6.Text + " " + PPlayMV7.Text + " " + PPlayMV8.Text + " " +
-                        confirmBusNumberFinal;
-                    p2.Start();
-                    Thread.Sleep(500); //give it time to...breathe
-                    p2.Close();
-                }
-                else if (dropdown_reset.Text == "Clocks")
-                {
-                    //save old clock speeds
-                    var PPlayCV1_backup = PPlayCV1.Text;
-                    var PPlayCV2_backup = PPlayCV2.Text;
-                    var PPlayCV3_backup = PPlayCV3.Text;
-                    var PPlayCV4_backup = PPlayCV4.Text;
-                    var PPlayCV5_backup = PPlayCV5.Text;
-                    var PPlayCV6_backup = PPlayCV6.Text;
-                    var PPlayCV7_backup = PPlayCV7.Text;
-                    var PPlayCV8_backup = PPlayCV8.Text;
-                    var PPlayMV1_backup = PPlayMV1.Text;
-                    var PPlayMV2_backup = PPlayMV2.Text;
-                    var PPlayMV3_backup = PPlayMV3.Text;
-                    var PPlayMV4_backup = PPlayMV4.Text;
-                    var PPlayMV5_backup = PPlayMV5.Text;
-                    var PPlayMV6_backup = PPlayMV6.Text;
-                    var PPlayMV7_backup = PPlayMV7.Text;
-                    var PPlayMV8_backup = PPlayMV8.Text;
-                    //start
-                    Process p1 = new Process();
-                    p1.StartInfo.UseShellExecute = false;
-                    p1.StartInfo.RedirectStandardOutput = true;
-                    p1.StartInfo.CreateNoWindow = true;
-                    p1.StartInfo.FileName = @"ecs87NextGearOD.exe";
-                    //Reset everything
-                    p1.StartInfo.Arguments = "rmc " + confirmBusNumberFinal;
-                    p1.Start();
-                    Thread.Sleep(500); //give it time to...breathe
-                    p1.Close();
-                    //start
-                    Process p2 = new Process();
-                    p2.StartInfo.UseShellExecute = false;
-                    p2.StartInfo.RedirectStandardOutput = true;
-                    p2.StartInfo.CreateNoWindow = true;
-                    p2.StartInfo.FileName = @"ecs87NextGearOD.exe";
-                    //Set backuped clocks
-                    p2.StartInfo.Arguments = "g setclocksandvoltages " + PPlayCC1.Text + " " + PPlayCC2.Text + " " + PPlayCC3.Text + " " + PPlayCC4.Text + " " + PPlayCC5.Text + " " + PPlayCC6.Text + " " + PPlayCC7.Text + " " + PPlayCC8.Text + " " +
-                        PPlayMC1.Text + " " + PPlayMC2.Text + " " + PPlayMC3.Text + " " + PPlayMC4.Text + " " + PPlayMC5.Text + " " + PPlayMC6.Text + " " + PPlayMC7.Text + " " + PPlayMC8.Text + " " +
-                        PPlayCV1_backup + " " + PPlayCV2_backup + " " + PPlayCV3_backup + " " + PPlayCV4_backup + " " + PPlayCV5_backup + " " + PPlayCV6_backup + " " + PPlayCV7_backup + " " + PPlayCV8_backup + " " +
-                        PPlayMV1_backup + " " + PPlayMV2_backup + " " + PPlayMV3_backup + " " + PPlayMV4_backup + " " + PPlayMV5_backup + " " + PPlayMV6_backup + " " + PPlayMV7_backup + " " + PPlayMV8_backup + " " +
-                        confirmBusNumberFinal;
-                    p2.Start();
-                    Thread.Sleep(500); //give it time to...breathe
-                    p2.Close();
-                }
+                //start
+                Process p1 = new Process();
+                p1.StartInfo.UseShellExecute = false;
+                p1.StartInfo.RedirectStandardOutput = true;
+                p1.StartInfo.CreateNoWindow = true;
+                p1.StartInfo.FileName = @"ecs87NextGearOD.exe";
+                //Reset everything
+                p1.StartInfo.Arguments = "r " + confirmBusNumberFinal;
+                p1.Start();
+                Thread.Sleep(500); //give it time to...breathe
+                p1.Close();
+                afterSetRefresh();
             }
             catch { }
         }
@@ -484,6 +401,7 @@ namespace WpfApplication5
                 p2.Start();
                 Thread.Sleep(500); //give it time to...breathe
                 p2.Close();
+                afterSetRefresh();
             }
         }
         private void buttonClkAndVolts_Save_Click(object sender, System.EventArgs e)
@@ -518,10 +436,69 @@ namespace WpfApplication5
             }
             catch { }
         }
+        private void autoSettings()
+        {
+            //init
+            if (File.ReadAllText("ngODInit") == "") { File.WriteAllText("ngODInit", "1"); }
+            else if (File.ReadAllText("ngODInit") == "0") { File.WriteAllText("ngODInit", "1"); }
+            else if (File.ReadAllText("ngODInit") == "1") {
+                File.WriteAllText("ngODInit", "0");
+                try
+                {
+                    ProcessStartInfo proc2 = new ProcessStartInfo();
+                    proc2.FileName = "start.bat";
+                    Process.Start(proc2);
+                    System.Environment.Exit(1);
+                }
+                catch
+                {
+                    System.Environment.Exit(1);
+                }
+            }
+            //get profiles
+            string[] fileEntries = Directory.GetFiles(@".", "*.ngOD", SearchOption.AllDirectories);
+            if (fileEntries.Length != 0)
+            {
+                try
+                {
+                    foreach (string fileName in fileEntries)
+                    {
+                        System.Collections.Generic.IEnumerable<String> lines = File.ReadLines(fileName);
+                        foreach (string lineItem in lines)
+                        {
+                            //get bus number
+                            var finalFileName = fileName.LastIndexOf(@"\");
+                            var finalFileName2 = fileName.Substring(finalFileName + 1);
+                            string busNumber = new String(finalFileName2.Where(Char.IsDigit).ToArray());
+                            //start
+                            Process p2 = new Process();
+                            p2.StartInfo.UseShellExecute = false;
+                            p2.StartInfo.RedirectStandardOutput = true;
+                            p2.StartInfo.CreateNoWindow = true;
+                            p2.StartInfo.FileName = @"ecs87NextGearOD.exe";
+                            p2.StartInfo.Arguments = lineItem + " " + busNumber;
+                            p2.Start();
+                            Thread.Sleep(100); //give it time to...breathe
+                            p2.Close();
+                        }
+                    }
+                }
+                catch { }
+            }
+            ProcessStartInfo proc = new ProcessStartInfo();
+            proc.FileName = "cmd";
+            proc.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.Arguments = "/C shutdown -f -r -t 5";
+            Process.Start(proc);
+        }
         private void buttonClkAndVolts_Load_Click(object sender, System.EventArgs e)
         {
             try
             {
+                string[] fileEntries = Directory.GetFiles(@"/");
+                foreach (string fileName in fileEntries)
+                    Console.WriteLine(fileName);
+
                 Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
                 dlg.Title = "Open ngOD File"; // Default file name
                 dlg.Filter = "Next Gen OD files only|*.ngOD"; // Filter files by extension
@@ -580,7 +557,7 @@ namespace WpfApplication5
             }
             catch { }
         }
-        private void button_VoltageOffset_Click(object sender, RoutedEventArgs e)
+        /* private void button_VoltageOffset_Click(object sender, RoutedEventArgs e)
         {
             if (cmVoffset.Text == "")
             {
@@ -647,5 +624,6 @@ namespace WpfApplication5
                 catch { }
             }
         }
+        */
     }
 }
